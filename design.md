@@ -1,34 +1,54 @@
 # Galaxian: Dive Bomb Enemies - Design
 
 ## Concept
-A classic fixed shooter with a disciplined enemy formation that periodically breaks ranks to dive-bomb the player. Survive waves, shoot invaders, and avoid direct collisions.
+A deterministic fixed shooter inspired by Galaxian with run-based progression. The player fights through 60 waves in 5-wave blocks. After each block, gameplay pauses for an intermission shop where upgrades and timed power charges can be purchased.
 
 ## Core Loop
-- Start in formation mode; enemies march horizontally and step down.
-- Dive-bomb timer selects a random invader to swoop toward the player.
-- Player dodges and shoots to score points.
-- Clear the formation to advance the wave and speed up enemy movement.
+1. Survive and clear enemy formations while avoiding dive-bomb rushes and enemy bullets.
+2. Earn score, credits, and XP from kills and wave clears.
+3. Enter intermission every 5 waves to buy upgrades.
+4. Start next block with higher difficulty.
+5. Repeat until wave 60 victory or life depletion.
 
 ## Controls
-- Move: Arrow Left / Arrow Right (A / D)
-- Shoot: Space
-- Start: Enter (or click)
-- Pause: P
-- Restart: R
-- Fullscreen: F
+- Move: Arrow Left / Arrow Right (`A` / `D`)
+- Shoot: `Space`
+- Start / Confirm: `Enter`
+- Pause: `P`
+- Restart: `R`
+- Fullscreen: `F`
+- Activate Double XP: `Q`
+- Activate Infinity Lives: `E`
+- Shop buy: `1..9` or click row
 
-## Twist
-Dive-bomb enemies accelerate toward the player at timed intervals. Dive kills score bonus points.
+## Upgrade Economy (Run-Only)
+Permanent upgrades:
+- Extra life cap
+- Rapid fire
+- Spread shot
+- Piercing rounds
+- Engine boost
+- Hull plating
+- Support drone unlock
 
-## Scoring
-- Standard enemy: 100 points.
-- Dive-bomb enemy: 150 points.
+Timed consumables:
+- Infinity Lives charge (manual activation)
+- Double XP charge (manual activation)
 
-## Difficulty & Progression
-- Each cleared wave increases formation speed.
-- Dive cooldown varies deterministically using the seeded RNG.
+No progression is persisted between runs.
 
-## Determinism
-- RNG seeded via `?seed=` query param.
-- `window.advanceTime(ms)` steps the simulation at a fixed 60 FPS.
-- `window.render_game_to_text()` returns a concise JSON snapshot with coordinates and entity state.
+## Difficulty Scaling
+Difficulty is block-based (`blockIndex = floor((wave-1)/5)`) and increases by:
+- Larger formations (rows/cols growth)
+- Faster formation movement
+- Faster and more frequent dive-bombs
+- Enemy projectile pressure
+- Expanded playfield dimensions
+
+Target shape: most players struggle around wave 30-40, with wave 60 as endgame completion.
+
+## Determinism Contract
+- Seeded RNG drives target and timing choices.
+- `window.advanceTime(ms)` advances deterministic simulation frames.
+- `window.render_game_to_text()` returns compact gameplay state for automation.
+- Snapshot payload keeps prior keys and adds progression/shop/power metadata.

@@ -27,9 +27,9 @@ body {
 }
 
 canvas {
-  width: min(92vw, 520px);
+  width: min(96vw, 740px);
   height: auto;
-  max-height: 92vh;
+  max-height: 95vh;
   border-radius: 18px;
   background: #05070f;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
