@@ -10,6 +10,7 @@ declare global {
 
 const params = new URLSearchParams(window.location.search);
 const scripted = params.get("scripted_demo") === "1";
+const scriptedShopDemo = params.get("scripted_shop_demo") === "1";
 const autostart = params.get("autostart") === "1" || scripted;
 
 const seedParam = params.get("seed");
@@ -29,6 +30,15 @@ const safeCtx = ctx as CanvasRenderingContext2D;
 let state = createGame(Number.isFinite(seed) ? seed : 20260223);
 if (autostart) {
   state.mode = "playing";
+}
+if (scriptedShopDemo) {
+  state.mode = "intermission";
+  state.wave = 6;
+  state.waveBlock = 1;
+  state.credits = 2600;
+  state.xp = 980;
+  state.intermission.reason = "Scripted shop demo mode";
+  state.intermission.nextBlock = 1;
 }
 
 const held = new Set<string>();
